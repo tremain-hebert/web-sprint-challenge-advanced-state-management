@@ -1,45 +1,55 @@
 import React, { useState } from 'react';
-import { useInput } from '../hooks/useInput';
-import { axios } from 'axios';
+import axios from 'axios';
 
-const SmurfForm = () => {
+const SmurfForm = (dispatch) => {
 
-    const [name, setName, handleName] = useInput('');
-    const [age, setAge, handleAge] = useInput('');
-    const [height, setHeight, handleHeight] = useInput('');
+    const [formState, setFormState] = useState({
+        name: '',
+        age: '',
+        height: ''
+    })
 
-    const resetValues = e => {
-        e.preventDefault();
+    const inputChange = e => {
+        e.persist()
+        let value = e.target.value
+        setFormState({...formState, [e.target.name]: value})
+    }
+
+    const formSubmit = e => {
         axios
-            .post("http://localhost:3333/smurfs")
+            .post('http://localhost:3333/smurfs', formState)
             .then(res => {
-                console.log(res.data)
+                setFormState({
+                    name: '',
+                    age: '',
+                    height: ''
+                });
             })
-            .catch(err => console.log("There was an error", err))
+            .catch(err => console.log(err))
     };
     
     return (
-        <form onSubmit={resetValues}>
+        <form onSubmit={formSubmit}>
             <input
                 type="text"
                 name="name"
-                value={name}
+                value={formState.name}
                 placeholder="Name"
-                onChange={e => handleName(e.target.value)}
+                onChange={inputChange}
             />
             <input
                 type="text"
                 name="age"
-                value={age}
+                value={formState.age}
                 placeholder='Age'
-                onChange={e => handleAge(e.target.value)}
+                onChange={inputChange}
             />
             <input
                 type="text"
                 name="height"
-                value={height}
+                value={formState.height}
                 placeholder="Height"
-                onChange={e => handleHeight(e.target.value)}
+                onChange={inputChange}
             />
             <button>Submit</button>
         </form>

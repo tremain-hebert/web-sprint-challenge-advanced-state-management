@@ -7,12 +7,18 @@ import thunk from 'redux-thunk';
 
 import App from "./components/App";
 import SmurfForm from "./components/smurfForm";
+import Smurf from "./components/Smurf";
+import { SmurfContext } from "./contexts/SmurfContext";
+import { smurfReducer } from './reducers/smurfReducer';
 
-const store = createStore(applyMiddleware(thunk))
+const store = createStore(smurfReducer, applyMiddleware(thunk))
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
-        <SmurfForm />
+        <SmurfContext.Provider value={Smurf}>
+            <App />
+            <SmurfForm />
+            <Smurf />
+        </SmurfContext.Provider>
     </Provider>, document.getElementById("root")
 );
