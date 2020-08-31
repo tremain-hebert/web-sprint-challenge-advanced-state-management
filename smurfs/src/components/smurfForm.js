@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useInput } from '../hooks/useInput';
+import { axios } from 'axios';
 
-const smurfForm = () => {
+const SmurfForm = () => {
 
     const [name, setName, handleName] = useInput('');
     const [age, setAge, handleAge] = useInput('');
@@ -9,9 +10,12 @@ const smurfForm = () => {
 
     const resetValues = e => {
         e.preventDefault();
-        setAge('');
-        setHeight('');
-        setName('');
+        axios
+            .post("http://localhost:3333/smurfs")
+            .then(res => {
+                console.log(res.data)
+            })
+            .catch(err => console.log("There was an error", err))
     };
     
     return (
@@ -26,7 +30,7 @@ const smurfForm = () => {
             <input
                 type="text"
                 name="age"
-                value={aga}
+                value={age}
                 placeholder='Age'
                 onChange={e => handleAge(e.target.value)}
             />
@@ -37,8 +41,9 @@ const smurfForm = () => {
                 placeholder="Height"
                 onChange={e => handleHeight(e.target.value)}
             />
+            <button>Submit</button>
         </form>
     );
 };
 
-export default smurfForm;
+export default SmurfForm;
