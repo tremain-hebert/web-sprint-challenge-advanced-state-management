@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import { useInput } from '../hooks/useInput';
 import { axios } from 'axios';
 
 const SmurfForm = () => {
 
-    const [name, setName, handleName] = useInput('');
-    const [age, setAge, handleAge] = useInput('');
-    const [height, setHeight, handleHeight] = useInput('');
+    const [formState, setFormState] = useState({
+        name: '',
+        age: '',
+        height: ''
+    })
 
+    const inputChange = e => {
+        
+    }
     const resetValues = e => {
         e.preventDefault();
         axios
-            .post("http://localhost:3333/smurfs")
+            .post("http://localhost:3333/smurfs", formState)
             .then(res => {
                 console.log(res.data)
             })
